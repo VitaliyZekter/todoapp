@@ -6,6 +6,7 @@ import './List.css'
 function List({ todo, setTodo }) {
     const [edit, setEdit] = useState();
     const [value, setValue] = useState('');
+    // const [status, setStatus] = useState(false);
 
     function deleteTask(id) {
         const newTodo = [...todo.filter(item => item.id !== id)]
@@ -29,13 +30,32 @@ function List({ todo, setTodo }) {
         setEdit(null);
     }
 
+    const changeStatus = (id) => {
+        const newTodo = [...todo].map(item => {
+            if (item.id == id) {
+                item.status = !item.status
+            }
+            return item;
+        })
+        setTodo(newTodo);
+    }
+
+   
+
     return (
         <>
             <div className="list">
+
                 {
                     todo.map(item =>
                         <div key={item.id}>
-                            <p className="title">{item.title}</p>
+
+                            <div className="title__div">
+                                <p className="title">{item.title}</p>
+                                <p>{item.status ? <span className="done">Done</span> : <span className="inprogress">In progress</span>}</p>
+                            </div>
+
+
                             {
                                 edit === item.id ? (
                                     <div>
@@ -46,6 +66,7 @@ function List({ todo, setTodo }) {
                                     <div>
                                         <button onClick={() => deleteTask(item.id)}>Delete task</button>
                                         <button onClick={() => editTask(item.id, item.title)}>Edit task</button>
+                                        <button onClick={() => changeStatus(item.id)}>Change status</button>
                                     </div>
                                 )
                             }
